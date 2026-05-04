@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MsOfficeHub", "MsOfficeHub.csproj", "{51EE83CB-6001-DD3D-2A75-9639055A3A4E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{51EE83CB-6001-DD3D-2A75-9639055A3A4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{51EE83CB-6001-DD3D-2A75-9639055A3A4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{51EE83CB-6001-DD3D-2A75-9639055A3A4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{51EE83CB-6001-DD3D-2A75-9639055A3A4E}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DCB4F7F7-F7A6-488B-AE83-A61EBD84B477}
+	EndGlobalSection
+EndGlobal

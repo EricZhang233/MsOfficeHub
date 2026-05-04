@@ -1,0 +1,57 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100</TargetFramework>
+    <TargetPlatformMinVersion>10.0.26100.0</TargetPlatformMinVersion>
+    <UseWinUI>true</UseWinUI>
+    <RootNamespace>MsOfficeHub</RootNamespace>
+    <AssemblyName>MsOfficeHub</AssemblyName>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+    <RuntimeIdentifiers>win-x64</RuntimeIdentifiers>
+    <ErrorOnUnsupportedTargetingPlatformVersion>false</ErrorOnUnsupportedTargetingPlatformVersion>
+    <AppxPackage>false</AppxPackage>
+    <GenerateAppxPackageOnBuild>false</GenerateAppxPackageOnBuild>
+    <WindowsAppSDKUsePrerelease>false</WindowsAppSDKUsePrerelease>
+    <WindowsPackageType>None</WindowsPackageType>
+    <DisablePriGeneration>true</DisablePriGeneration>
+    <ApplicationIcon>ico.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <VersionFileContent>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\Version.cs'))</VersionFileContent>
+    <ExtractedVersion>$([System.Text.RegularExpressions.Regex]::Match($(VersionFileContent),
+      `Version\s*=\s*"([^"]+)"`).Groups[1].Value)</ExtractedVersion>
+  </PropertyGroup>
+
+  <Target Name="SyncVersion" BeforeTargets="BeforeBuild">
+    <PropertyGroup Condition="'$(ExtractedVersion)' != ''">
+      <Version>$(ExtractedVersion)</Version>
+      <AssemblyVersion>$(ExtractedVersion)</AssemblyVersion>
+      <FileVersion>$(ExtractedVersion)</FileVersion>
+    </PropertyGroup>
+    <Message Importance="High" Text="Synced Version from Version.cs: $(ExtractedVersion)" />
+  </Target>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260101001" />
+    <PackageReference Include="WinUIEx" Version="2.4.0" />
+    <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="ico.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Office\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+</Project>
