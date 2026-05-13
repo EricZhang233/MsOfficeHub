@@ -22,6 +22,7 @@ jobs:
           fi
           BASE_VERSION=${{ github.event.release.tag_name }}
           BASE_VERSION=${BASE_VERSION#v}
+          BASE_VERSION=$(echo "$BASE_VERSION" | sed 's/\.0$//')
           echo "VERSION=$BASE_VERSION" >> $GITHUB_OUTPUT
           echo "Expected version is $BASE_VERSION"
 

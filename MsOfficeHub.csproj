@@ -26,6 +26,7 @@
     <VersionFileContent>$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)\Version.cs'))</VersionFileContent>
     <ExtractedVersion>$([System.Text.RegularExpressions.Regex]::Match($(VersionFileContent),
       `Version\s*=\s*"([^"]+)"`).Groups[1].Value)</ExtractedVersion>
+    <ReleaseVersion>$([System.Text.RegularExpressions.Regex]::Replace($(ExtractedVersion), `\.0$`, ``))</ReleaseVersion>
   </PropertyGroup>
 
   <Target Name="SyncVersion" BeforeTargets="BeforeBuild">
@@ -59,9 +60,9 @@
 
   <!-- Local Release packaging: create zip and clean on Release builds (mirrors egl behavior) -->
   <Target Name="ZipReleaseBuild" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
-    <Message Importance="High" Text="Zipping Release artifacts to MsOfficeHub_$(ExtractedVersion).zip..." />
+    <Message Importance="High" Text="Zipping Release artifacts to MsOfficeHub_$(ReleaseVersion).zip..." />
     <MakeDir Directories="output" />
-    <Exec Command="powershell -NoProfile -Command &quot;Compress-Archive -Path '$(OutputPath)\*' -DestinationPath 'output\MsOfficeHub_$(ExtractedVersion).zip' -Force&quot;" />
+    <Exec Command="powershell -NoProfile -Command &quot;Compress-Archive -Path '$(OutputPath)\*' -DestinationPath 'output\MsOfficeHub_$(ReleaseVersion).zip' -Force&quot;" />
   </Target>
 
   <Target Name="ReleasePostCleanPayload" AfterTargets="ZipReleaseBuild" Condition="'$(Configuration)' == 'Release'">
