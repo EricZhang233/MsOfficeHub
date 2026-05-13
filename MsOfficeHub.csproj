@@ -39,6 +39,8 @@
 
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.WinUI.UI.Controls" Version="7.1.2" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="10.0.8" />
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="10.0.8" />
     <PackageReference Include="Microsoft.WindowsAppSDK" Version="1.8.260101001" />
     <PackageReference Include="WinUIEx" Version="2.4.0" />
     <PackageReference Include="System.Drawing.Common" Version="8.0.8" />
@@ -49,9 +51,24 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Assets\Office\**\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    <EmbeddedResource Include="Assets\Office\**\*">
+      <LogicalName>Assets.Office.%(Filename)%(Extension)</LogicalName>
+    </EmbeddedResource>
+    <Content Remove="Assets\**\*" />
   </ItemGroup>
+
+  <!-- Local Release packaging: create zip and clean on Release builds (mirrors egl behavior) -->
+  <Target Name="ZipReleaseBuild" AfterTargets="Build" Condition="'$(Configuration)' == 'Release'">
+    <Message Importance="High" Text="Zipping Release artifacts to MsOfficeHub_$(ExtractedVersion).zip..." />
+    <MakeDir Directories="output" />
+    <Exec Command="powershell -NoProfile -Command &quot;Compress-Archive -Path '$(OutputPath)\*' -DestinationPath 'output\MsOfficeHub_$(ExtractedVersion).zip' -Force&quot;" />
+  </Target>
+
+  <Target Name="ReleasePostCleanPayload" AfterTargets="ZipReleaseBuild" Condition="'$(Configuration)' == 'Release'">
+    <RemoveDir Directories="bin" />
+    <RemoveDir Directories="obj" />
+    <RemoveDir Directories="payload" />
+    <Message Importance="High" Text="Release post-build cleanup: payload and binary directories removed." />
+  </Target>
 
 </Project>

@@ -59,12 +59,22 @@ namespace MsOfficeHub
                 return false;
             }
 
-            if (TryResolveAppPath(RegistryView.Registry64, exeName, out path))
+            if (TryResolveAppPath(RegistryHive.CurrentUser, RegistryView.Registry64, exeName, out path))
             {
                 return true;
             }
 
-            if (TryResolveAppPath(RegistryView.Registry32, exeName, out path))
+            if (TryResolveAppPath(RegistryHive.CurrentUser, RegistryView.Registry32, exeName, out path))
+            {
+                return true;
+            }
+
+            if (TryResolveAppPath(RegistryHive.LocalMachine, RegistryView.Registry64, exeName, out path))
+            {
+                return true;
+            }
+
+            if (TryResolveAppPath(RegistryHive.LocalMachine, RegistryView.Registry32, exeName, out path))
             {
                 return true;
             }
@@ -72,16 +82,16 @@ namespace MsOfficeHub
             return false;
         }
 
-        private bool TryResolveAppPath(RegistryView view, string exeName, out string path)
+        private bool TryResolveAppPath(RegistryHive hive, RegistryView view, string exeName, out string path)
         {
             path = string.Empty;
 
-            using var baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, view);
+            using var baseKey = RegistryKey.OpenBaseKey(hive, view);
             using var appPathsKey = baseKey.OpenSubKey($"SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\App Paths\\{exeName}");
 
             if (appPathsKey?.GetValue("") is string appPath && !string.IsNullOrWhiteSpace(appPath))
             {
-                path = appPath.Trim();
+                path = appPath.Trim(' ', '"');
                 return true;
             }
 
